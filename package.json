@@ -1,5 +1,5 @@
 {
-  "name": "boilerplate-nodejs-express",
+  "name": "financial-login",
   "version": "0.0.0",
   "description": "base-app-future-future-developments",
   "keywords": [
@@ -11,7 +11,10 @@
   "author": "Fellipe Maia",
   "main": "src/server/index.js",
   "scripts": {
-    "dev:start": "node ./node_modules/nodemon/bin/nodemon.js ./src/server",
+    "dev:start": "nodemon ./src/server",
+    "docker:build": "docker build --target development --tag financial/login:development .",
+    "docker:run": "docker run -t -v .\\:/app -p 5001:5001 --network bridge --name=financial-login financial/login:development",
+    "docker:volume:create": "docker volume create --drive vol-login --opt device=./ ",
     "lint": "eslint --ext .jsx,.js src/ electron/",
     "start": "node ./src/server",
     "test": "jest"
@@ -38,7 +41,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "nodemon": "2.0.20",
+    "pg": "8.11.3",
     "pino": "8.8.0",
     "pino-multi-stream": "6.0.0",
     "uuidv4": "^6.2.0"

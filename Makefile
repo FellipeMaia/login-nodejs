@@ -1,21 +1,22 @@
 
-NAME=boilerplate-nodejs-express
+NAME=login
+SUFFIX=financial
 PWD=$(shell pwd)
 APPDIR=/app
 
 
 dev.setup-image: Dockerfile
-	docker build --target development --tag bo/$(NAME):development .
+	docker build --target development --tag ${SUFFIX}/$(NAME):development .
 
 dev.remove-image:
-ifeq ($(shell docker images -q bo/${NAME}development 2> /dev/null | wc -l | bc), 0)
+ifeq ($(shell docker images -q ${SUFFIX}/${NAME}development 2> /dev/null | wc -l | bc), 0)
 	@docker rmi $(NAME):development
 endif
 
 dev.check-if-image-exist:
-ifeq ($(shell docker images -q bo/${NAME}:development 2> /dev/null | wc -l | bc), 0)
+ifeq ($(shell docker images -q ${SUFFIX}/${NAME}:development 2> /dev/null | wc -l | bc), 0)
 	@make dev.setup-image
 endif
 
 dev.start: dev.check-if-image-exist
-	@docker run -t -v ${PWD}:${APPDIR} -p 80:5001 -w ${APPDIR} --name=inst-${NAME} bo/${NAME}:development
+	@docker run -t -v ${PWD}:${APPDIR} -p 80:5001 -w ${APPDIR} --name=inst-${NAME} ${SUFFIX}/${NAME}:development
