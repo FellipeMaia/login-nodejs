@@ -2,6 +2,7 @@ const createStreamLog = require('../infrastructure/logger')
 const CONST = require('../utils/config')
 require('../utils/HandleError')
 const app = require('./app')
+const database = require('../infrastructure/database/connection')
 
 /**
  * Iniciar o serviço de cotação
@@ -12,8 +13,11 @@ function startServer() {
     .then(({ logger, stopStreamLog }) => {
       global.logger = logger
       global.stopStreamLog = stopStreamLog
-      return app
+      return database
         .start()
+        .then(() => {
+          return app.start()
+        })
         .then(() => {
           return mapEventCloseSystem()
         })
@@ -67,6 +71,9 @@ function callbackStopSystem() {
       logger.error(handleError.toJsonLog())
       logger.debug(handleError)
       return Promise.resolve(true)
+    })
+    .then(() => {
+      return stop()
     })
     .then(() => {
       return stopStreamLog()
