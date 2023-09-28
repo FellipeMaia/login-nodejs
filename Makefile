@@ -19,4 +19,4 @@ ifeq ($(shell docker images -q ${SUFFIX}/${NAME}:development 2> /dev/null | wc -
 endif
 
 dev.start: dev.check-if-image-exist
-	@docker run -t -v ${PWD}:${APPDIR} -p 80:5001 -w ${APPDIR} --name=inst-${NAME} ${SUFFIX}/${NAME}:development
+	@docker run -it -v ${PWD}:${APPDIR} --network=host --env-file=.env -p 5001:5001 -w ${APPDIR} --name=inst-${NAME} ${SUFFIX}/${NAME}:development
